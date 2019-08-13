@@ -5,7 +5,7 @@ const { GraphQLServer } = require('graphql-yoga')
 const typeDefs = `
   type Query {
     greeting(name: String, position: String): String!
-    sum(a: Float!, b: Float!): Float!
+    sum(arr: [Float!]): Float!
     grades: [Int!]!
     me: User!
     post: Post!
@@ -31,7 +31,7 @@ const resolvers = {
       return `Hello ${args.name}. You are my favorite ${args.position}`
     },
     sum (parent, args) {
-      return args.a + args.b
+      return args.arr.length === 0 ? 0 : args.arr.reduce((before, now) => before + now)
     },
     grades (parent, args) {
       return [1, 2, 3]
