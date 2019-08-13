@@ -4,15 +4,31 @@ const { GraphQLServer } = require('graphql-yoga')
 
 const typeDefs = `
   type Query {
-    hello: String!
+    id: ID!
+    name: String!
+    age: Int!
+    employed: Boolean!
+    gpa: Float
   }
 `
 
 // Resolvers
 const resolvers = {
   Query: {
-    hello () {
-      return 'this is my first query!'
+    id () {
+      return '@akkonomi'
+    },
+    name () {
+      return 'Wako'
+    },
+    age () {
+      return 26
+    },
+    employed () {
+      return true
+    },
+    gpa () {
+      return null
     }
   }
 }
