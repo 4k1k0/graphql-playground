@@ -2,11 +2,35 @@
 
 const { GraphQLServer } = require('graphql-yoga')
 
+const users = [
+  {
+    id: '1',
+    name: 'Wako',
+    email: 'wako@gmail.com',
+    age: 26
+  },
+  {
+    id: '2',
+    name: 'Akko',
+    email: 'akko@gmail.com'
+  },
+  {
+    id: '3',
+    name: 'Akiko',
+    email: 'akiko@gmail.com',
+    age: 22
+  },
+  {
+    id: '4',
+    name: 'Kagome',
+    email: 'kagome@gmail.com',
+    age: 16
+  }
+]
+
 const typeDefs = `
   type Query {
-    greeting(name: String, position: String): String!
-    sum(arr: [Float!]): Float!
-    grades: [Int!]!
+    users(query: String): [User!]!
     me: User!
     post: Post!
   }
@@ -27,14 +51,8 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
   Query: {
-    greeting (parent, args) {
-      return `Hello ${args.name}. You are my favorite ${args.position}`
-    },
-    sum (parent, args) {
-      return args.arr.length === 0 ? 0 : args.arr.reduce((before, now) => before + now)
-    },
-    grades (parent, args) {
-      return [1, 2, 3]
+    users (parent, args) {
+      return args.query ? users.filter(u => u.name.toLowerCase().includes(args.query.toLowerCase())) : users
     },
     me () {
       return {
