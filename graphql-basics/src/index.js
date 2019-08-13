@@ -4,31 +4,31 @@ const { GraphQLServer } = require('graphql-yoga')
 
 const typeDefs = `
   type Query {
-    id: ID!
-    name: String!
-    age: Int!
-    employed: Boolean!
-    gpa: Float
+    title: String!
+    price: Float!
+    releaseYear: Int
+    rating: Float
+    inStock: Boolean!
   }
 `
 
 // Resolvers
 const resolvers = {
   Query: {
-    id () {
-      return '@akkonomi'
+    title () {
+      return 'Evangelion DVD'
     },
-    name () {
-      return 'Wako'
+    price () {
+      return 666.9
     },
-    age () {
-      return 26
+    releaseYear () {
+      return 2006
     },
-    employed () {
-      return true
+    rating () {
+      return 6.7
     },
-    gpa () {
-      return null
+    inStock () {
+      return false
     }
   }
 }
