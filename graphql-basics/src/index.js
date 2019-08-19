@@ -52,12 +52,30 @@ const posts = [
   }
 ]
 
+const comments = [
+  {
+    id: '1',
+    text: 'First comment!'
+  },
+  {
+    id: '2',
+    text: 'Second comment'
+  },
+  {
+    id: '3',
+    text: 'Third comment'
+  },
+  {
+    id: '4',
+    text: 'Fourth comment'
+  }
+]
+
 const typeDefs = `
   type Query {
     users(query: String): [User!]!
     posts(query: String): [Post!]!
-    me: User!
-    post: Post!
+    comments: [Comment!]!
   }
   type User {
     id: ID!
@@ -73,6 +91,10 @@ const typeDefs = `
     published: Boolean!
     author: User!
   }
+  type Comment {
+    id: ID!
+    text: String!
+  }
 `
 
 // Resolvers
@@ -84,21 +106,8 @@ const resolvers = {
     posts (parent, args) {
       return args.query ? posts.filter(p => p.tittle.toLowerCase().includes(args.query.toLowerCase())) : posts
     },
-    me () {
-      return {
-        id: '666ddd',
-        name: 'Wako',
-        email: 'wako@wako.com',
-        age: null
-      }
-    },
-    post () {
-      return {
-        id: '9992ss',
-        tittle: 'My first post',
-        body: 'Lorem Ipsum',
-        published: false
-      }
+    comments () {
+      return comments
     }
   },
   Post: {
