@@ -33,19 +33,22 @@ const posts = [
     id: '1',
     tittle: 'Hello World!',
     body: 'Lorem Ipsum',
-    published: true
+    published: true,
+    author: '1'
   },
   {
     id: '2',
     tittle: 'Hello from Graphql!',
     body: 'Lorem QL',
-    published: true
+    published: true,
+    author: '3'
   },
   {
     id: '3',
     tittle: 'Hello from Node.js!',
     body: 'Lorem Node',
-    published: false
+    published: false,
+    author: '1'
   }
 ]
 
@@ -67,6 +70,7 @@ const typeDefs = `
     tittle: String!
     body: String!
     published: Boolean!
+    author: User!
   }
 `
 
@@ -94,6 +98,13 @@ const resolvers = {
         body: 'Lorem Ipsum',
         published: false
       }
+    }
+  },
+  Post: {
+    author (parent, args, ctx, info) {
+      return users.find(user => {
+        return user.id === parent.author
+      })
     }
   }
 }
