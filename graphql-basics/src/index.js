@@ -1,6 +1,7 @@
 'use strict'
 
 const { GraphQLServer } = require('graphql-yoga')
+const uuidv4 = require('uuid/v4')
 
 const users = [
   {
@@ -85,6 +86,11 @@ const typeDefs = `
     posts(query: String): [Post!]!
     comments: [Comment!]!
   }
+
+  type Mutation {
+    createUser (name: String!, email: String!, age: Int): User!
+  }
+
   type User {
     id: ID!
     name: String!
@@ -120,6 +126,21 @@ const resolvers = {
     },
     comments () {
       return comments
+    }
+  },
+  Mutation: {
+    createUser (parent, args, ctx, info) {
+      const { name, email, age } = args
+      const emailTaken = users.some(user => user.email === email)
+      if (emailTaken) throw new Error('Email taken :(')
+      const user = {
+        id: uuidv4(),
+        name,
+        email,
+        age
+      }
+      users.push(user)
+      return user
     }
   },
   Post: {
