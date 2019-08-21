@@ -161,7 +161,7 @@ const resolvers = {
     createComment (parent, args, ctx, info) {
       const { text, author, post } = args
       const userExists = users.some(user => user.id === author)
-      const postExists = posts.some(p => p.id === post)
+      const postExists = posts.some(p => p.id === post && p.published)
       if (!userExists || !postExists) throw new Error('User or post does not exists :(')
       const comment = {
         id: uuidv4(),
