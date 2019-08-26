@@ -4,7 +4,7 @@ const Mutation = {
   createUser (parent, args, { db }, info) {
     const { data } = args
     const { name, email, age } = data
-    const emailTaken = db.users.some(user => user.email === email)
+    const emailTaken = db.default.users.some(user => user.email === email)
     if (emailTaken) throw new Error('Email taken :(')
     const user = {
       id: uuidv4(),
@@ -12,30 +12,30 @@ const Mutation = {
       email,
       age
     }
-    db.users.push(user)
+    db.default.users.push(user)
     return user
   },
   deleteUser (parent, args, { db }, info) {
-    const userIndex = db.users.findIndex(u => u.id === args.id)
+    const userIndex = db.default.users.findIndex(u => u.id === args.id)
     if (userIndex === -1) throw new Error('User does not exists :(')
-    const deletedUsers = db.users.splice(userIndex, 1)
-    db.posts = db.posts.filter(post => {
+    const deletedUsers = db.default.users.splice(userIndex, 1)
+    db.default.posts = db.default.posts.filter(post => {
       const match = post.autho === args.id
       if (match) {
-        db.comments = db.comments.filter(comment => comment.post !== post.id)
+        db.default.comments = db.default.comments.filter(comment => comment.post !== post.id)
       }
       return !match
     })
 
-    db.comments = db.comments.filter(comments => comments.author !== args.id)
+    db.default.comments = db.default.comments.filter(comments => comments.author !== args.id)
     return deletedUsers[0]
   },
   updateUser (parent, args, { db }, info) {
     const { id, data } = args
-    const user = db.users.find(user => user.id === id)
+    const user = db.default.users.find(user => user.id === id)
     if (!user) throw new Error('User not found')
     if (typeof data.email === 'string') {
-      const emailTaken = db.users.some(u => u.email === data.email)
+      const emailTaken = db.default.users.some(u => u.email === data.email)
       if (emailTaken) throw new Error('Email taken')
       user.email = data.email
     }
@@ -50,7 +50,7 @@ const Mutation = {
   createPost (parent, args, { db }, info) {
     const { data } = args
     const { tittle, body, published, author } = data
-    const userExists = db.users.some(user => user.id === author)
+    const userExists = db.default.users.some(user => user.id === author)
     if (!userExists) throw new Error('User does not exists :(')
     const post = {
       id: uuidv4(),
@@ -59,21 +59,21 @@ const Mutation = {
       published,
       author
     }
-    db.posts.push(post)
+    db.default.posts.push(post)
     return post
   },
   deletePost (parent, args, { db }, info) {
-    const postIndex = db.posts.findIndex(p => p.id === args.id)
+    const postIndex = db.default.posts.findIndex(p => p.id === args.id)
     if (postIndex === -1) throw new Error('Post does not exists :(')
-    const deletedPosts = db.posts.splice(postIndex, 1)
-    db.comments = db.comments.filter(c => c.post !== args.id)
+    const deletedPosts = db.default.posts.splice(postIndex, 1)
+    db.default.comments = db.default.comments.filter(c => c.post !== args.id)
     return deletedPosts[0]
   },
   createComment (parent, args, { db }, info) {
     const { data } = args
     const { text, author, post } = data
-    const userExists = db.users.some(user => user.id === author)
-    const postExists = db.posts.some(p => p.id === post && p.published)
+    const userExists = db.default.users.some(user => user.id === author)
+    const postExists = db.default.posts.some(p => p.id === post && p.published)
     if (!userExists || !postExists) throw new Error('User or post does not exists :(')
     const comment = {
       id: uuidv4(),
@@ -81,15 +81,15 @@ const Mutation = {
       author,
       post
     }
-    db.comments.push(comment)
+    db.default.comments.push(comment)
     return comment
   },
   deleteComment (parent, args, { db }, info) {
-    const commentIndex = db.comments.findIndex(c => c.id === args.id)
+    const commentIndex = db.default.comments.findIndex(c => c.id === args.id)
     if (commentIndex === -1) throw new Error('Comment does not exists :(')
-    const deletedComments = db.comments.splice(commentIndex, 1)
+    const deletedComments = db.default.comments.splice(commentIndex, 1)
     return deletedComments[0]
   }
 }
 
-export { Mutation as default }
+module.exports = Mutation
