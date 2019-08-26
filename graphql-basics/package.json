@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "babel-node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "nodemon src/index.js --ext js,graphql  --exec babel-node",
     "lint": "standard"
   },
   "dependencies": {
