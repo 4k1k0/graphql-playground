@@ -69,6 +69,21 @@ const Mutation = {
     db.default.comments = db.default.comments.filter(c => c.post !== args.id)
     return deletedPosts[0]
   },
+  updatePost (parent, args, { db }, info) {
+    const { data } = args
+    const post = db.default.posts.find(p => p.id === args.id)
+    if (!post) throw new Error('Post does not exists :(')
+    if (typeof data.tittle === 'string') {
+      post.tittle = data.tittle
+    }
+    if (typeof data.body === 'string') {
+      post.body = data.body
+    }
+    if (typeof data.published === 'boolean') {
+      post.published = data.published
+    }
+    return post
+  },
   createComment (parent, args, { db }, info) {
     const { data } = args
     const { text, author, post } = data
