@@ -88,9 +88,28 @@ const typeDefs = `
   }
 
   type Mutation {
-    createUser (name: String!, email: String!, age: Int): User!
-    createPost (tittle: String!, body: String!, published: Boolean!, author: ID!): Post!
-    createComment (text: String!, author: ID!, post: ID!): Comment!
+    createUser (data: CreateUserInput!): User!
+    createPost (data: CreatePostInput!): Post!
+    createComment (data: CreateCommentInput!): Comment!
+  }
+
+  input CreateUserInput {
+    name: String!
+    email: String!
+    age: Int
+  }
+
+  input CreatePostInput {
+    tittle: String!
+    body: String!
+    published: Boolean!
+    author: ID!
+  }
+
+  input CreateCommentInput {
+    text: String!
+    author: ID!
+    post: ID!
   }
 
   type User {
@@ -132,7 +151,8 @@ const resolvers = {
   },
   Mutation: {
     createUser (parent, args, ctx, info) {
-      const { name, email, age } = args
+      const { data } = args
+      const { name, email, age } = data
       const emailTaken = users.some(user => user.email === email)
       if (emailTaken) throw new Error('Email taken :(')
       const user = {
@@ -145,7 +165,8 @@ const resolvers = {
       return user
     },
     createPost (parent, args, ctx, info) {
-      const { tittle, body, published, author } = args
+      const { data } = args
+      const { tittle, body, published, author } = data
       const userExists = users.some(user => user.id === author)
       if (!userExists) throw new Error('User does not exists :(')
       const post = {
@@ -159,7 +180,8 @@ const resolvers = {
       return post
     },
     createComment (parent, args, ctx, info) {
-      const { text, author, post } = args
+      const { data } = args
+      const { text, author, post } = data
       const userExists = users.some(user => user.id === author)
       const postExists = posts.some(p => p.id === post && p.published)
       if (!userExists || !postExists) throw new Error('User or post does not exists :(')
