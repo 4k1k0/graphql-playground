@@ -84,7 +84,7 @@ const Mutation = {
     }
     return post
   },
-  createComment (parent, args, { db }, info) {
+  createComment (parent, args, { db, pubsub }, info) {
     const { data } = args
     const { text, author, post } = data
     const userExists = db.users.some(user => user.id === author)
@@ -97,6 +97,7 @@ const Mutation = {
       post
     }
     db.comments.push(comment)
+    pubsub.publish(`comment ${data.post}`, { comment })
     return comment
   },
   deleteComment (parent, args, { db }, info) {
