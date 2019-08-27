@@ -104,6 +104,15 @@ const Mutation = {
     if (commentIndex === -1) throw new Error('Comment does not exists :(')
     const deletedComments = db.default.comments.splice(commentIndex, 1)
     return deletedComments[0]
+  },
+  updateComment (parent, args, { db }, info) {
+    const { data } = args
+    const comment = db.default.comments.find(c => c.id === args.id)
+    if (!comment) throw new Error('Comment does not exists :(')
+    if (typeof data.text === 'string') {
+      comment.text = data.text
+    }
+    return comment
   }
 }
 
