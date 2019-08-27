@@ -1,14 +1,17 @@
 'use strict'
 
-const { GraphQLServer } = require('graphql-yoga')
+const { GraphQLServer, PubSub } = require('graphql-yoga')
 const db = require('./db')
 const resolvers = require('./resolvers')
+
+const pubsub = new PubSub()
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
   context: {
-    db
+    db,
+    pubsub
   }
 })
 

@@ -81,4 +81,4 @@ const db = {
   comments
 }
 
-export { db as default }
+module.exports = db
