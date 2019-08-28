@@ -22,7 +22,7 @@ const Subscription = {
     }
   },
   post: {
-    subscribe (parent, args, { db, pubsub }, info) {
+    subscribe (parent, args, { pubsub }, info) {
       return pubsub.asyncIterator('posts')
     }
   }
